@@ -14,6 +14,7 @@ export const fromRentedCarResponseToRentedCar = (
             numberPlate: rentedCar.patente,
             sellerName: rentedCar.vendedor.nombre,
             sellerRut: rentedCar.vendedor.rut,
+            modelId: rentedCar.modelo.id,
         };
     });
 };

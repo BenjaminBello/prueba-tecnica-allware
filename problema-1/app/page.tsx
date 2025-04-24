@@ -1,20 +1,28 @@
-import { getVehiclesAction } from '@/actions/get-vehicles.action';
+'use client';
 import { columns } from '@/components/rent-car/columns';
 import { DataTable } from '@/components/rent-car/data-table';
 import { RentCarForm } from '@/components/rent-car/RentCarForm';
+import { useVehicles } from '@/hooks/useGetVehicles';
 import { Toaster } from 'sonner';
 
-export default async function Home() {
+export default function Home() {
 
+  const { getVechiclesQuery } = useVehicles();
 
-  const { data } = await getVehiclesAction();
-
+  if (getVechiclesQuery.isLoading) {
+    return <div className="container mx-auto py-10">Loading...</div>;
+  }
 
   return (
     <div className="container mx-auto py-10">
       <RentCarForm />
-      <Toaster />
-      <DataTable columns={columns} data={data} />
+      <Toaster toastOptions={{
+        classNames: {
+          success: 'bg-green-500 text-white',
+          error: 'bg-red-500 text-white',
+        }
+      }} />
+      <DataTable columns={columns} data={getVechiclesQuery.data?.data ?? []} />
     </div>
   );
 }

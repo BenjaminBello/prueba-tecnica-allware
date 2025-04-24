@@ -10,9 +10,11 @@ import { Input } from '../ui/input'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Separator } from '../ui/separator'
+import { useGetBrands } from '@/hooks/useGetBrands';
 
 export const RentCarForm = () => {
     const { setOpenDialog, isOpen } = useDialog();
+    const { getBrandsQuery } = useGetBrands()
 
     const formSchema = z.object({
         clientName: z.string().min(1, { message: "Nombre es requerido" }),
@@ -21,6 +23,7 @@ export const RentCarForm = () => {
         brand: z.string().min(1, { message: "Marca vehículo es requerido" }),
         model: z.string().min(1, { message: "Modelo vehículo es requerido" }),
         color: z.string().min(1, { message: "Color vehículo es requerido" }),
+        price: z.number().min(1, { message: "Precio es requerido" }),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -32,6 +35,7 @@ export const RentCarForm = () => {
             brand: "",
             model: "",
             color: "",
+            price: 0,
         },
     })
 
@@ -61,6 +65,7 @@ export const RentCarForm = () => {
                             <div className="space-y-4">
                                 <h3 className="text-lg font-medium">Detalles del Vendedor</h3>
                                 <div className="grid gap-4">
+
                                     <FormField
                                         control={form.control}
                                         name="clientName"
@@ -95,6 +100,21 @@ export const RentCarForm = () => {
                             <div className="space-y-4">
                                 <h3 className="text-lg font-medium">Detalles del Vehículo</h3>
                                 <div className="grid gap-4 md:grid-cols-2">
+
+                                    <FormField
+                                        control={form.control}
+                                        name="price"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Precio</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="0" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
                                     <FormField
                                         control={form.control}
                                         name="numberPlate"
@@ -122,10 +142,11 @@ export const RentCarForm = () => {
                                                     </FormControl>
                                                     <SelectContent >
                                                         <SelectItem value="toyota">Toyota</SelectItem>
-                                                        <SelectItem value="audi">Audi</SelectItem>
-                                                        <SelectItem value="hyundai">Hyundai</SelectItem>
-                                                        <SelectItem value="nissan">Nissan</SelectItem>
-                                                        <SelectItem value="susuki">Susuki</SelectItem>
+                                                        {
+                                                            getBrandsQuery.data?.map((brand) => (
+                                                                <SelectItem key={brand.id} value={brand.id}>{brand.nombre}</SelectItem>
+                                                            ))
+                                                        }
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -166,6 +187,8 @@ export const RentCarForm = () => {
                                             </FormItem>
                                         )}
                                     />
+
+
                                 </div>
                             </div>
                         </div>
