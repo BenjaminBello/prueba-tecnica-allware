@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../lib/generated/prisma"
 }
 
 datasource db {
@@ -25,15 +24,18 @@ model modelo {
 model vehiculo {
   id             Int       @id @default(autoincrement())
   patente        String    @unique @db.VarChar(10)
-  modelo_id      Int
   precio         Int
   fecha_creacion DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
   color          String?   @db.VarChar(20)
+  modelo_id      Int
+  vendedor_id    Int
   modelo         modelo    @relation(fields: [modelo_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  vendedor       vendedor  @relation(fields: [vendedor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model vendedor {
-  id     Int    @id @default(autoincrement())
-  nombre String @db.VarChar(100)
-  rut    String @unique @db.VarChar(20)
+  id       Int        @id @default(autoincrement())
+  nombre   String     @db.VarChar(100)
+  rut      String     @unique @db.VarChar(20)
+  vehiculo vehiculo[]
 }

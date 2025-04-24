@@ -66,7 +66,7 @@ export const RentCarForm = () => {
                                         name="clientName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Nombre del Cliente</FormLabel>
+                                                <FormLabel>Nombre del Vendedor</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="Ingrese el nombre completo" {...field} />
                                                 </FormControl>

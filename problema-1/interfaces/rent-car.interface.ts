@@ -1,5 +1,5 @@
 export interface RentedCar {
-    id?: string;
+    id?: number;
     sellerName: string;
     sellerRut: string;
     numberPlate: string;

@@ -1,14 +1,17 @@
-
+import { getVehiclesAction } from '@/actions/get-vehicles.action';
 import { columns } from '@/components/rent-car/columns';
 import { DataTable } from '@/components/rent-car/data-table';
 import { RentCarForm } from '@/components/rent-car/RentCarForm';
-import { rentedCars } from '@/data/cars.data';
 
-export default function Home() {
+export default async function Home() {
+
+  const { data } = await getVehiclesAction();
+
+
   return (
     <div className="container mx-auto py-10">
       <RentCarForm />
-      <DataTable columns={columns} data={rentedCars} />
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
