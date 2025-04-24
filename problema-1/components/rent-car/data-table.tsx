@@ -23,8 +23,8 @@ import {
 import { useDialog } from '@/hooks/useDialog'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+import { Button, Input } from '../ui'
+
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

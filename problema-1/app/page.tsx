@@ -1,8 +1,8 @@
 'use client';
-import { columns } from '@/components/rent-car/columns';
-import { DataTable } from '@/components/rent-car/data-table';
+
+import { columns, DataTable } from '@/components/rent-car';
 import { RentCarForm } from '@/components/rent-car/RentCarForm';
-import { useVehicles } from '@/hooks/useGetVehicles';
+import { useVehicles } from '@/hooks';
 import { Toaster } from 'sonner';
 
 export default function Home() {
@@ -16,12 +16,7 @@ export default function Home() {
   return (
     <div className="container mx-auto py-10">
       <RentCarForm />
-      <Toaster toastOptions={{
-        classNames: {
-          success: 'bg-green-500 text-white',
-          error: 'bg-red-500 text-white',
-        }
-      }} />
+      <Toaster />
       <DataTable columns={columns} data={getVechiclesQuery.data?.data ?? []} />
     </div>
   );
