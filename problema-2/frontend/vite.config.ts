@@ -4,6 +4,11 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      "/ws/vehiculos": "http://localhost:8080", // Cambia esto a la URL de tu backend
+    },
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

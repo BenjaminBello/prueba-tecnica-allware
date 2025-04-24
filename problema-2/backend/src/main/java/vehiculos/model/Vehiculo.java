@@ -1,7 +1,5 @@
 package vehiculos.model;
 
-import java.time.LocalDate;
-
 public class Vehiculo {
 
     private String patente;
@@ -10,19 +8,22 @@ public class Vehiculo {
     private int precio;
     private String fechaCreacion;
     private String color;
+    private String nombreVendedor;
+    private String rutVendedor;
 
     public Vehiculo() {
     }
 
-    public Vehiculo(String patente, String marca, String modelo, int precio, String fechaCreacion, String color) {
+    public Vehiculo(String patente, String marca, String modelo, int precio, String fechaCreacion, String color, String nombreVendedor, String rutVendedor) {
         this.patente = patente;
         this.marca = marca;
         this.modelo = modelo;
         this.precio = precio;
         this.fechaCreacion = fechaCreacion;
         this.color = color;
+        this.nombreVendedor = nombreVendedor;
+        this.rutVendedor = rutVendedor;
     }
-
 
     public String getPatente() {
         return patente;
@@ -61,7 +62,7 @@ public class Vehiculo {
     }
 
     public void setFechaCreacion(String fechaCreacion) {
-        this.fechaCreacion = Vehiculo.this.fechaCreacion;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public void setColor(String color) {
@@ -70,6 +71,22 @@ public class Vehiculo {
 
     public String getColor() {
         return color;
+    }
+
+    public String getNombreVendedor() {
+        return nombreVendedor;
+    }
+
+    public void setNombreVendedor(String nombreVendedor) {
+        this.nombreVendedor = nombreVendedor;
+    }
+
+    public String getRutVendedor() {
+        return rutVendedor;
+    }
+
+    public void setRutVendedor(String rutVendedor) {
+        this.rutVendedor = rutVendedor;
     }
 
     @Override
@@ -81,6 +98,8 @@ public class Vehiculo {
                 ", precio=" + precio +
                 ", fechaCreacion=" + fechaCreacion +
                 ", color='" + color + '\'' +
+                ", nombreVendedor='" + nombreVendedor + '\'' +
+                ", rutVendedor='" + rutVendedor + '\'' +
                 '}';
     }
 }
