@@ -4,6 +4,8 @@ import { ColumnDef, FilterFn, Row } from "@tanstack/react-table"
 import { ArrowUpDown, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { currencyFormatter } from '@/lib/currencyFormatter'
+import { deleteVehicleAction } from '@/actions/delete-vehicle.action'
+import { toast } from 'sonner'
 
 const myCustomFilterFn: FilterFn<RentedCar> = (row: Row<RentedCar>, columnId: string, filterValue: string, addMeta: (meta: any) => void) => {
     filterValue = filterValue.toLowerCase();
@@ -18,6 +20,15 @@ const myCustomFilterFn: FilterFn<RentedCar> = (row: Row<RentedCar>, columnId: st
         return true;
     }
     return false;
+}
+
+const handleDeleteVehicle = async (id: number) => {
+    const resp = await deleteVehicleAction(id);
+    if (resp) {
+        toast('Vehículo eliminado correctamente');
+    } else {
+        toast('Error al eliminar el vehículo');
+    }
 }
 
 export const columns: ColumnDef<RentedCar>[] = [
@@ -92,10 +103,10 @@ export const columns: ColumnDef<RentedCar>[] = [
     {
         id: "actions",
         header: "Acciones",
-        cell: () => {
+        cell: ({ row }) => {
 
             return (
-                <Button variant={'ghost'} className='cursor-pointer'>
+                <Button variant={'ghost'} className='cursor-pointer' onClick={() => handleDeleteVehicle(row.original.id!)} >
                     <Trash2 className='scale-150' color='red' />
                 </Button>
             )
