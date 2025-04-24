@@ -4,9 +4,9 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     SortingState,
-    getPaginationRowModel,
     useReactTable
 } from "@tanstack/react-table"
 
@@ -18,8 +18,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { useDialog } from '@/hooks/useDialog'
-import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -53,27 +51,22 @@ export function DataTable<TData, TValue>({
         },
     })
 
-    const { setOpenDialog } = useDialog()
+
 
     return (
         <>
-            <div className='flex items-center gap-4'>
-                <div className="flex items-center py-4 sm:w-1/3">
-                    <Input
-                        placeholder="Buscar... (nombre, rut, patente)"
-                        value={(table.getColumn("clientName")?.getFilterValue() as string) ?? ""}
-                        onChange={(event) => {
-                            table.getColumn("clientName")?.setFilterValue(event.target.value);
-                        }}
-                        className="max-w-sm"
-                    />
-                </div>
-                <div>
-                    <Button className='bg-green-500 hover:bg-green-600 text-white' onClick={() => setOpenDialog(true)}>
-                        <Plus /> Vehículo
-                    </Button>
-                </div>
+
+            <div className="flex items-center py-4 sm:w-1/3">
+                <Input
+                    placeholder="Buscar... (nombre, rut, patente)"
+                    value={(table.getColumn("sellerName")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) => {
+                        table.getColumn("sellerName")?.setFilterValue(event.target.value);
+                    }}
+                    className="max-w-sm"
+                />
             </div>
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

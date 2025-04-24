@@ -1,11 +1,11 @@
 
 import { RentedCar } from '@/interfaces/rent-car.interface'
-import { ColumnDef, FilterFn, Row } from "@tanstack/react-table"
-import { ArrowUpDown, Trash2 } from 'lucide-react'
-import { Button } from '../ui/button'
 import { currencyFormatter } from '@/lib/currencyFormatter'
+import { ColumnDef, FilterFn, Row } from "@tanstack/react-table"
+import { ArrowUpDown } from 'lucide-react'
+import { Button } from '../ui/button'
 
-const myCustomFilterFn: FilterFn<RentedCar> = (row: Row<RentedCar>, columnId: string, filterValue: string, addMeta: (meta: any) => void) => {
+const myCustomFilterFn: FilterFn<RentedCar> = (row: Row<RentedCar>, columnId: string, filterValue: string) => {
     filterValue = filterValue.toLowerCase();
 
     if (row.original.sellerName.toLowerCase().includes(filterValue)) {
@@ -30,6 +30,13 @@ export const columns: ColumnDef<RentedCar>[] = [
         accessorKey: "sellerRut",
         filterFn: myCustomFilterFn,
         header: "Rut vendedor",
+        cell: ({ row }) => {
+            return (
+                <span className='text-slate-800 font-medium'>
+                    {row.getValue('sellerRut')}
+                </span>
+            )
+        }
     },
     {
         accessorKey: "numberPlate",
@@ -89,16 +96,5 @@ export const columns: ColumnDef<RentedCar>[] = [
             )
         },
     },
-    {
-        id: "actions",
-        header: "Acciones",
-        cell: () => {
 
-            return (
-                <Button variant={'ghost'} className='cursor-pointer'>
-                    <Trash2 className='scale-150' color='red' />
-                </Button>
-            )
-        },
-    },
 ]
