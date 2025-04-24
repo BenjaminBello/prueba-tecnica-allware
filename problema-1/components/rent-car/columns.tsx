@@ -73,6 +73,13 @@ export const columns: ColumnDef<RentedCar>[] = [
     {
         accessorKey: "color",
         header: "Color vehículo",
+        cell: ({ row }) => {
+            return (
+                <span className='capitalize'>
+                    {row.getValue('color')}
+                </span>
+            )
+        }
     },
     {
         accessorKey: "price",

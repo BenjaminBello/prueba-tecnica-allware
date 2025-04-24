@@ -1,50 +1,75 @@
 'use client';
-import { useDialog } from '@/hooks/useDialog'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { Button } from '../ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
+import { useDialog } from '@/hooks/useDialog';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '../ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
 
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { Separator } from '../ui/separator'
 import { useGetBrands } from '@/hooks/useGetBrands';
+import { useGetModels } from '@/hooks/useGetModels';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '../ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Separator } from '../ui/separator';
+import { useEffect, useState } from 'react';
+import { useCreateVehicle } from '@/hooks';
 
 export const RentCarForm = () => {
+    const [brandId, setBrandId] = useState<number>();
+
     const { setOpenDialog, isOpen } = useDialog();
     const { getBrandsQuery } = useGetBrands()
+    const { getModelsQuery } = useGetModels(brandId)
+    const { createVehicleMutation } = useCreateVehicle()
 
     const formSchema = z.object({
-        clientName: z.string().min(1, { message: "Nombre es requerido" }),
+        sellerName: z.string().min(1, { message: "Nombre es requerido" }),
         sellerRut: z.string().regex(/^\d{7,8}-[\dkK]$/, { message: "RUT inválido" }),
         numberPlate: z.string().regex(/^[A-Z]{2}\d{4}$|^[A-Z]{4}\d{2}$/i, { message: "Patente inválida" }),
         brand: z.string().min(1, { message: "Marca vehículo es requerido" }),
         model: z.string().min(1, { message: "Modelo vehículo es requerido" }),
         color: z.string().min(1, { message: "Color vehículo es requerido" }),
-        price: z.number().min(1, { message: "Precio es requerido" }),
+        price: z.string().min(1, { message: "Precio vehículo es requerido" }).refine((value) => {
+            const parsedValue = parseFloat(value);
+            return !isNaN(parsedValue) && parsedValue > 0;
+        }, { message: "Precio inválido" }),
+
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            clientName: "",
+            sellerName: "",
             sellerRut: "",
             numberPlate: "",
             brand: "",
             model: "",
             color: "",
-            price: 0,
+            price: "",
         },
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        const { sellerName, color, model, numberPlate, price, sellerRut } = values
+        await createVehicleMutation.mutateAsync({
+            color,
+            numberPlate,
+            price: Number(price),
+            sellerRut,
+            modelId: Number(model),
+            sellerName,
+        });
+        form.reset();
+        setOpenDialog(false);
     }
 
+    const brandValue = form.watch("brand")
+
+    useEffect(() => {
+        setBrandId(Number(brandValue))
+    }, [brandValue]);
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpenDialog}>
@@ -68,7 +93,7 @@ export const RentCarForm = () => {
 
                                     <FormField
                                         control={form.control}
-                                        name="clientName"
+                                        name="sellerName"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Nombre del Vendedor</FormLabel>
@@ -108,7 +133,10 @@ export const RentCarForm = () => {
                                             <FormItem>
                                                 <FormLabel>Precio</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="0" {...field} />
+                                                    <Input placeholder="0" {...field} type='number' onChange={(e) => {
+                                                        const value = e.target.value
+                                                        field.onChange(value === "" ? undefined : value)
+                                                    }} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -122,7 +150,12 @@ export const RentCarForm = () => {
                                             <FormItem>
                                                 <FormLabel>Placa/Patente</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Ej: ABCD12" {...field} />
+                                                    <Input placeholder="Ej: ABCD12" {...field} onChange={
+                                                        (e) => {
+                                                            const value = e.target.value.toUpperCase();
+                                                            field.onChange(value);
+                                                        }
+                                                    } />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -141,10 +174,9 @@ export const RentCarForm = () => {
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent >
-                                                        <SelectItem value="toyota">Toyota</SelectItem>
                                                         {
                                                             getBrandsQuery.data?.map((brand) => (
-                                                                <SelectItem key={brand.id} value={brand.id}>{brand.nombre}</SelectItem>
+                                                                <SelectItem key={brand.id} value={brand.id.toString()} onClick={() => setBrandId(brand.id)}>{brand.nombre}</SelectItem>
                                                             ))
                                                         }
                                                     </SelectContent>
@@ -166,8 +198,11 @@ export const RentCarForm = () => {
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent >
-                                                        <SelectItem value="model1">Modelo1</SelectItem>
-                                                        <SelectItem value="model2">Modelo2</SelectItem>
+                                                        {
+                                                            getModelsQuery.data?.map((model) => (
+                                                                <SelectItem key={model.id} value={model.id.toString()}>{model.nombre}</SelectItem>
+                                                            ))
+                                                        }
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -194,10 +229,13 @@ export const RentCarForm = () => {
                         </div>
 
                         <div className="flex justify-end gap-2 ">
-                            <Button type="button" variant="outline">
+                            <Button type="button" variant="outline" onClick={() => setOpenDialog(false)}>
                                 Cancelar
                             </Button>
-                            <Button type="submit">Guardar</Button>
+                            <Button type="submit"
+                                disabled={createVehicleMutation.isPending}
+                                className="bg-blue-500 hover:bg-blue-600 text-white"
+                            >Guardar</Button>
                         </div>
                     </form>
                 </Form>
