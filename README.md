@@ -52,10 +52,11 @@ npm run dev
 ```
 mvn clean install
 ```
-6. Ejecutar (si se usa Intellij) el archivo `Main.java`.
-7. Hacer cd a la carpeta **frontend**.
-8. Instalar las dependencias con `npm install`
-9. Correr la app:
+6. Si se usa Intellij, asegurarse que Project Structure esté configurado para usar un SDK de Java 1.8. En mi caso, utilicé Eclipse Temurin JDK 8.
+7. Ejecutar el archivo `Main.java`, con ello ya debe estar corriendo el webservice en `localhost:8080`.
+8. Hacer cd a la carpeta **frontend**.
+9. Instalar las dependencias con `npm install`
+10. Correr la app:
 ```
 npm run dev
 ```
