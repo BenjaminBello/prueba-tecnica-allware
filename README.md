@@ -41,7 +41,7 @@ npm run dev
   - **interfaces**: Tipado de datos utilizado a lo largo de la app.
   - **mappers**: Funciones que se encargan de transformar los datos de la BD a un formato definido en las interfaces.
   - **actions**: Funciones que se encargan de realizar las peticiones a la BD y regresar la respuesta.
-  - **Providers**: Proveedores de contexto utilizados a lo largo de la app (TanStack Query).
+  - **providers**: Proveedores de contexto utilizados a lo largo de la app (TanStack Query).
 
 ## Problema 2 - React (Vite) y Java 1.8:
 1. Hacer cd a la carpeta **problema-2**.
