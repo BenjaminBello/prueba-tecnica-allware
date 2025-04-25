@@ -2,12 +2,13 @@
 import { useEffect, useState } from 'react';
 import { useDialog } from '@/hooks/useDialog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useGetBrands } from '@/hooks/useGetBrands';
 import { useGetModels } from '@/hooks/useGetModels';
 import { useCreateVehicle } from '@/hooks';
-import { Button, Dialog, DialogContent, DialogDescription, DialogTitle, FormControl, FormField, FormItem, FormLabel, FormMessage, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator } from '../ui';
+import { Button, Dialog, DialogContent, DialogDescription, DialogTitle, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator } from '../ui';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 
 export const RentCarForm = () => {
     const [brandId, setBrandId] = useState<number>();
@@ -63,7 +64,8 @@ export const RentCarForm = () => {
 
     useEffect(() => {
         setBrandId(Number(brandValue))
-    }, [brandValue]);
+        form.setValue("model", "")
+    }, [brandValue, form]);
 
     return (
         <Dialog open={isOpen} onOpenChange={setOpenDialog}>
@@ -191,7 +193,7 @@ export const RentCarForm = () => {
                                                             <SelectValue placeholder="Seleccione modelo" />
                                                         </SelectTrigger>
                                                     </FormControl>
-                                                    <SelectContent >
+                                                    <SelectContent>
                                                         {
                                                             getModelsQuery.data?.map((model) => (
                                                                 <SelectItem key={model.id} value={model.id.toString()}>{model.nombre}</SelectItem>
@@ -228,7 +230,7 @@ export const RentCarForm = () => {
                             </Button>
                             <Button type="submit"
                                 disabled={createVehicleMutation.isPending}
-                                className="bg-blue-500 hover:bg-blue-600 text-white"
+                                className="bg-green-500 hover:bg-green-600 text-white"
                             >Guardar</Button>
                         </div>
                     </form>

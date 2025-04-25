@@ -16,28 +16,24 @@
 
     <dependencies>
 
-        <!-- Dependencia para JAX-WS Runtime -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
             <version>2.3.3</version>
         </dependency>
 
-        <!-- Dependencia para PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.23</version>
         </dependency>
 
-        <!-- Dependencia para SLF4J (logging) -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.36</version>
         </dependency>
 
-        <!-- Dependencia para Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -45,7 +41,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Dependencia para Javax JWS API (esto puede ser opcional) -->
         <dependency>
             <groupId>javax.jws</groupId>
             <artifactId>javax.jws-api</artifactId>
@@ -58,7 +53,6 @@
     <build>
         <finalName>vehiculos-soap</finalName>
         <plugins>
-            <!-- Plugin para empaquetar como WAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

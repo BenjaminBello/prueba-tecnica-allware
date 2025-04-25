@@ -18,7 +18,7 @@ const myCustomFilterFn: FilterFn<RentedCar> = (row: Row<RentedCar>, columnId: st
     if (row.original.sellerRut.includes(filterValue)) {
         return true;
     }
-    if (row.original.numberPlate.includes(filterValue)) {
+    if (row.original.numberPlate.toLowerCase().includes(filterValue)) {
         return true;
     }
     return false;
@@ -72,7 +72,17 @@ export const columns: ColumnDef<RentedCar>[] = [
     },
     {
         accessorKey: "color",
-        header: "Color vehículo",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Color vehículo
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
         cell: ({ row }) => {
             return (
                 <span className='capitalize'>

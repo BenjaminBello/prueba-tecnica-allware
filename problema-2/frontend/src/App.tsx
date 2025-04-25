@@ -11,8 +11,8 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className='px-2 sm:px-0 min-h-screen flex flex-col justify-center items-center max-w-6xl mx-auto'>
-        <RentCarForm />
+      <RentCarForm />
+      <div className="container mx-auto py-10 h-screen">
         <RentCarPage />
       </div>
     </QueryClientProvider>

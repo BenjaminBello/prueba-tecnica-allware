@@ -11,6 +11,6 @@ export const deleteVehicleAction = async (id: number) => {
         return true;
     } catch (error) {
         console.error("Error deleting vehicle:", error);
-        throw new Error("No se pudo eliminar el vehículo");
+        throw new Error("Error deleting vehicle");
     }
 };
